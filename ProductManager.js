@@ -10,30 +10,29 @@ class ProductManager {
         let file = fs.existsSync(path)
         if (!file) {
             fs.promises.writeFile(path, '[]')
-                .then(res => console.log('created'))
+                .then(res => res)
                 .catch(err => err)
-
-            var datos1 = require('./data.json')
-            let datos = JSON.parse(datos1)
-
-            const contenedorPrincipal = document.querySelector('#contenedorPrincipal')
-
-            datos.forEach((dato => {
-                const contenedorProducto = document.createElement('div')
-                contenedorProducto.className = "producto"
-                contenedorProducto.innerHTML = `
-        <p>${dato.nombre}</p>
-        <p>${dato.categoria}</p>
-        <p>${dato.id}</p>
-        `
-
-                contenedorPrincipal.appendChild(contenedorProducto)
-            }))
         }
+        else {
+            fs.promises.readFile(path)
+                .then(res => {
+                    this.productos = JSON.parse(res)
+                    return res
+                })
+                .catch(err => console.log(err))
+        }
+    }
+    add_product({ nombre, categoria, precio }) {
+        let product = { nombre, categoria, precio }
+        product.id = 1
+        this.productos.push(product)
+        product = JSON.stringify(product, null, 2)
+        fs.promises.writeFile(this.path, product)
+            .then(res => ('producto creado'))
+            .catch(err => err)
     }
 }
 
-let product = new ProductManager('./data.json')
-
-
-
+let product = new ProductManager('./data/data.json')
+product.add_product({ nombre: "iphone 14", categoria: "celulares", precio: 134500 })
+product.add_product({ nombre: "iphone 13", categoria: "celulares", precio: 145500 })
