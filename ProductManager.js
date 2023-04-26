@@ -33,6 +33,6 @@ class ProductManager {
     }
 }
 
-let product = new ProductManager('./data/data.json')
+let product = new ProductManager('data.json')
 product.add_product({ nombre: "iphone 14", categoria: "celulares", precio: 134500 })
 product.add_product({ nombre: "iphone 13", categoria: "celulares", precio: 145500 })
